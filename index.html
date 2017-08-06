@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Webcam</title>
+    <link rel="shortcut icon" href="./favicon.png" />
+</head>
+<body>
+    <style type="text/css">
+        #v_div {
+            display: inline-block;
+        }
+
+        #video {
+            position:relative;
+            background-color: black;
+            z-index: -1;
+        }
+
+        #canvas {
+            background-color: black;
+        }
+
+        #error {
+            display: none;
+        }
+    </style>
+    <div id="v_div">
+        <h1 id="error">Sorry, your browser is not supported</h1>
+        <video id="video" width="640" height="480" autoplay></video>
+    </div>
+    <button id="snap">Snap Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <script type="text/javascript">
+        var video = document.getElementById('video');
+
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            });
+        } else {
+            document.getElementById('error').style.display = 'block';
+        }
+
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+
+        document.getElementById("snap").addEventListener("click", function() {
+            context.drawImage(video, 0, 0, 640, 480);
+            context.drawImage(mario, 460, 214, 200, 266);
+        });
+
+        var download_btn = document.getElementById("download");
+        document.getElementById("download").addEventListener("click", function() {
+            var data_url = canvas.toDataURL();
+            download_btn.href = data_url;
+        });
+
+    </script>
+</body>
+</html>
